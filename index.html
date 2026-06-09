@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart English Grammar Suite & AI Tutor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Immediately set the theme from localStorage to avoid flash of dark mode
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f7ff',
+                            100: '#ebf0ff',
+                            200: '#d6e0ff',
+                            300: '#b3c7ff',
+                            400: '#85a3ff',
+                            500: '#5275ff',
+                            600: '#2b44ff',
+                            700: '#1a29e0',
+                            800: '#1520b8',
+                            900: '#111994',
+                            950: '#0a0d5c',
+                        },
+                        slate: {
+                            950: '#0b1329'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Lucide Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+        }
+        /* Custom scrollbar style */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.5);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Light Mode Styles overrides */
+        html:not(.dark) body {
+            background-color: #f8fafc !important;
+            color: #1e293b !important;
+        }
+        html:not(.dark) .bg-slate-950 {
+            background-color: #f1f5f9 !important;
+        }
+        html:not(.dark) .bg-slate-900 {
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025);
+        }
+        html:not(.dark) .bg-slate-900\/80 {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+        }
+        html:not(.dark) .bg-slate-900\/50 {
+            background-color: rgba(248, 250, 252, 0.8) !important;
+        }
+        html:not(.dark) .bg-slate-950\/60 {
+            background-color: rgba(248, 250, 252, 0.9) !important;
+        }
+        html:not(.dark) .bg-slate-950\/40 {
+            background-color: rgba(241, 245, 249, 0.5) !important;
+        }
+        html:not(.dark) .border-slate-800 {
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .border-slate-800\/80 {
+            border-color: rgba(226, 232, 240, 0.8) !important;
+        }
+        html:not(.dark) .border-slate-800\/50 {
+            border-color: rgba(226, 232, 240, 0.5) !important;
+        }
+        html:not(.dark) .border-slate-900 {
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) .text-slate-100,
+        html:not(.dark) .text-white {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .text-slate-300 {
+            color: #334155 !important;
+        }
+        html:not(.dark) .text-slate-400 {
+            color: #64748b !important;
+        }
+        html:not(.dark) .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+        html:not(.dark) .text-slate-600 {
+            color: #94a3b8 !important;
+        }
+        html:not(.dark) .text-brand-300 {
+            color: #1d4ed8 !important;
+        }
+        html:not(.dark) .text-brand-400 {
+            color: #2563eb !important;
+        }
+        html:not(.dark) .hover\:text-slate-200:hover {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .hover\:border-slate-700:hover {
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) .hover\:bg-slate-850:hover {
+            background-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .bg-slate-850 {
+            background-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .from-brand-900\/30 {
+            --tw-gradient-from: rgba(219, 234, 254, 0.6) !important;
+        }
+        html:not(.dark) .from-violet-900\/30 {
+            --tw-gradient-from: rgba(243, 232, 255, 0.6) !important;
+        }
+        html:not(.dark) .from-emerald-900\/30 {
+            --tw-gradient-from: rgba(209, 250, 229, 0.6) !important;
+        }
+        html:not(.dark) .to-slate-900 {
+            --tw-gradient-to: #ffffff !important;
+        }
+        html:not(.dark) input,
+        html:not(.dark) textarea,
+        html:not(.dark) select {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) input::placeholder,
+        html:not(.dark) textarea::placeholder {
+            color: #94a3b8 !important;
+        }
+        html:not(.dark) .bg-brand-600,
+        html:not(.dark) .bg-brand-600 *,
+        html:not(.dark) .bg-emerald-600,
+        html:not(.dark) .bg-emerald-600 *,
+        html:not(.dark) .bg-gradient-to-r,
+        html:not(.dark) .bg-gradient-to-r * {
+            color: #ffffff !important;
+        }
+        html:not(.dark) .text-emerald-300 {
+            color: #047857 !important;
+        }
+        html:not(.dark) .bg-emerald-500\/10 {
+            background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+        html:not(.dark) .text-rose-300 {
+            color: #b91c1c !important;
+        }
+        html:not(.dark) .bg-rose-500\/10 {
+            background-color: rgba(244, 63, 94, 0.15) !important;
+        }
+        html:not(.dark) .bg-brand-500\/10 {
+            background-color: rgba(59, 130, 246, 0.15) !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- TOP HEADER / NAV -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 px-4 py-3 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-brand-600 rounded-xl text-white shadow-lg shadow-brand-500/20">
+                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        Grammar Matrix <span class="text-xs bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">v2.1 PRO</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Hệ thống Số hóa & Gia sư AI Ngữ pháp Tiếng Anh Cốt lõi</p>
+                </div>
+            </div>
+            
+            <!-- Global Navigation Tabs & Theme Toggle -->
+            <div class="flex items-center gap-3 overflow-x-auto max-w-full">
+                <nav class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 overflow-x-auto max-w-full">
+                    <button onclick="switchTab('learn')" id="tab-btn-learn" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-brand-600 text-white shadow-sm">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> Học Lý Thuyết
+                    </button>
+                    <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200">
+                        <i data-lucide="activity" class="w-4 h-4"></i> Sân Luyện Tập
+                    </button>
+                    <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200">
+                        <i data-lucide="award" class="w-4 h-4"></i> Đấu Trường Quiz
+                    </button>
+                    <button onclick="switchTab('ai-tutor')" id="tab-btn-ai-tutor" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> Trợ Lý AI Tutor
+                    </button>
+                </nav>
+                <button onclick="toggleDarkMode()" id="theme-toggle-btn" class="p-2.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded-xl text-slate-400 hover:text-slate-200 transition-all duration-200 shrink-0" title="Chuyển chế độ sáng/tối">
+                    <i data-lucide="sun" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY LAYOUT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col gap-6">
+        
+        <!-- ==================== TAB 1: LEARN (HỌC LÝ THUYẾT) ==================== -->
+        <section id="tab-content-learn" class="tab-content space-y-6">
+            <!-- Quick Dashboard / Topics Map -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-gradient-to-br from-brand-900/30 to-slate-900 border border-brand-500/20 rounded-2xl flex items-start gap-4">
+                    <div class="p-3 bg-brand-500/10 rounded-xl text-brand-400">
+                        <i data-lucide="help-circle" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white">1. Cấu trúc câu hỏi Wh-</h3>
+                        <p class="text-xs text-slate-400 mt-1">9 trường hợp từ nghi vấn thiết yếu và cấu trúc đặt câu hỏi chuẩn xác.</p>
+                        <button onclick="scrollToSection('sec-wh')" class="text-xs text-brand-400 hover:underline mt-2 inline-flex items-center gap-1">Khám phá ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-violet-900/30 to-slate-900 border border-violet-500/20 rounded-2xl flex items-start gap-4">
+                    <div class="p-3 bg-violet-500/10 rounded-xl text-violet-400">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white">2. Hệ Thống 6 Thì Cốt Lõi</h3>
+                        <p class="text-xs text-slate-400 mt-1">Trực quan hóa cấu trúc, dấu hiệu nhận biết, cách dùng & sự hòa hợp.</p>
+                        <button onclick="scrollToSection('sec-tenses')" class="text-xs text-violet-400 hover:underline mt-2 inline-flex items-center gap-1">Khám phá ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-emerald-900/30 to-slate-900 border border-emerald-500/20 rounded-2xl flex items-start gap-4">
+                    <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                        <i data-lucide="git-branch" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white">3. So Sánh & Điều Kiện</h3>
+                        <p class="text-xs text-slate-400 mt-1">Hệ thức so sánh hơn/nhất/đồng tiến & 5 dạng câu điều kiện đảo ngữ.</p>
+                        <button onclick="scrollToSection('sec-conditionals')" class="text-xs text-emerald-400 hover:underline mt-2 inline-flex items-center gap-1">Khám phá ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHỦ ĐIỂM 1: WH- QUESTIONS -->
+            <div id="sec-wh" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24">
+                <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-brand-500/10 border border-brand-500/30 rounded text-xs font-bold text-brand-400">01</span>
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-5 h-5 text-brand-400"></i> Cấu Trúc Đặt Câu Hỏi (Wh- Questions)
+                        </h2>
+                    </div>
+                    <span class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+                        Cấu trúc tổng quát: <code class="text-brand-300 font-mono">Wh- + Auxiliary/Tobe + S + V/O?</code>
+                    </span>
+                </div>
+                
+                <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Wh-words matrix card -->
+                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- What card -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">WHAT</span>
+                                <span class="text-xs text-slate-400">Cái gì</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng để hỏi thông tin chung, sự vật, sự việc.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Ví dụ:</strong> What do you use this website for?</p>
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Viết tắt IT:</strong> What does HTML stand for? / What does API mean?</p>
+                            </div>
+                        </div>
+                        <!-- Which card -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">WHICH</span>
+                                <span class="text-xs text-slate-400">Cái nào</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng khi hỏi sự lựa chọn giữa các đối tượng cụ thể.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Ví dụ:</strong> Which websites do you use? (Có giới hạn đối tượng)</p>
+                            </div>
+                        </div>
+                        <!-- Why card -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">WHY</span>
+                                <span class="text-xs text-slate-400">Tại sao</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng để hỏi lý do hoặc nguyên nhân.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Ví dụ:</strong> Why do you use this website?</p>
+                            </div>
+                        </div>
+                        <!-- Where card -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">WHERE</span>
+                                <span class="text-xs text-slate-400">Ở đâu</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng để hỏi vị trí, địa điểm hoặc nguồn gốc.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Ví dụ:</strong> Where are users from? / Where do they go?</p>
+                            </div>
+                        </div>
+                        <!-- When & What time -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">WHEN / TIME</span>
+                                <span class="text-xs text-slate-400">Khi nào / Mấy giờ</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng để hỏi mốc thời gian, giờ giấc cụ thể.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Ví dụ:</strong> When do you use it? / When do you have a break?</p>
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Giờ giấc:</strong> What time does the webinar start/finish?</p>
+                            </div>
+                        </div>
+                        <!-- Quantities -->
+                        <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-brand-400 font-bold text-lg">HOW MUCH/MANY</span>
+                                <span class="text-xs text-slate-400">Bao nhiêu</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-2">Dùng hỏi số lượng đếm được/không đếm được.</p>
+                            <div class="mt-3 space-y-1.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Many (+ N đếm được):</strong> How many visitors per day?</p>
+                                <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Much (+ N không đếm được):</strong> How much traffic does it get?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- How + Adj/Adv Deepdive -->
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="p-1.5 bg-brand-500/10 rounded text-brand-400"><i data-lucide="sliders" class="w-4 h-4"></i></span>
+                                <h3 class="font-semibold text-white">How + Adjective / Adverb</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-4">Cấu trúc đặc biệt dùng để hỏi về mức độ hoặc tính chất cụ thể của hành động/sự vật.</p>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 hover:bg-slate-900/80 border border-slate-800/50">
+                                    <div class="text-xs font-mono text-brand-400 font-bold pt-0.5">How often</div>
+                                    <div class="text-xs">
+                                        <p class="text-white">Hỏi tần suất (bao lâu một lần)</p>
+                                        <span class="text-[10px] text-slate-400">Ví dụ: How often do you clean the database?</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 hover:bg-slate-900/80 border border-slate-800/50">
+                                    <div class="text-xs font-mono text-brand-400 font-bold pt-0.5">How long</div>
+                                    <div class="text-xs">
+                                        <p class="text-white">Hỏi khoảng thời gian (bao lâu)</p>
+                                        <span class="text-[10px] text-slate-400">Ví dụ: How long do they stay on the landing page?</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 hover:bg-slate-900/80 border border-slate-800/50">
+                                    <div class="text-xs font-mono text-brand-400 font-bold pt-0.5">How fast</div>
+                                    <div class="text-xs">
+                                        <p class="text-white">Nhanh như thế nào (tốc độ)</p>
+                                        <span class="text-[10px] text-slate-400">Ví dụ: How fast does the server respond?</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 hover:bg-slate-900/80 border border-slate-800/50">
+                                    <div class="text-xs font-mono text-brand-400 font-bold pt-0.5">How far</div>
+                                    <div class="text-xs">
+                                        <p class="text-white">Hỏi khoảng cách bao xa</p>
+                                        <span class="text-[10px] text-slate-400">Ví dụ: How far is it from here to your office?</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-800 text-center">
+                            <span class="text-[11px] text-slate-400">Gặp lỗi cấu trúc? Thử ngay <strong class="text-brand-400 cursor-pointer" onclick="switchTab('practice')">Sân Luyện Tập Wh- Builder</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHỦ ĐIỂM 2: 6 core tenses -->
+            <div id="sec-tenses" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24">
+                <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-violet-500/10 border border-violet-500/30 rounded text-xs font-bold text-violet-400">02</span>
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="clock" class="w-5 h-5 text-violet-400"></i> Các Thì Trong Tiếng Anh (English Tenses Matrix)
+                        </h2>
+                    </div>
+                    <span class="text-xs text-slate-400">Bấm từng tab dưới đây để xem cấu trúc và dấu hiệu cụ thể</span>
+                </div>
+
+                <div class="p-6">
+                    <!-- Tense Nav Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-2 mb-6">
+                        <button onclick="showTenseDetail('pres-simple')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-brand-500 text-xs font-semibold text-brand-400 text-center transition" id="tb-pres-simple">
+                            Hiện Tại Đơn
+                        </button>
+                        <button onclick="showTenseDetail('pres-cont')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition" id="tb-pres-cont">
+                            Hiện Tại Tiếp Diễn
+                        </button>
+                        <button onclick="showTenseDetail('pres-perf')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition" id="tb-pres-perf">
+                            Hiện Tại Hoàn Thành
+                        </button>
+                        <button onclick="showTenseDetail('past-simple')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition" id="tb-past-simple">
+                            Quá Khứ Đơn
+                        </button>
+                        <button onclick="showTenseDetail('fut-simple')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition" id="tb-fut-simple">
+                            Tương Lai Đơn
+                        </button>
+                        <button onclick="showTenseDetail('near-fut')" class="tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition" id="tb-near-fut">
+                            Tương Lai Gần
+                        </button>
+                    </div>
+
+                    <!-- Tenses detail wrapper -->
+                    <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                        <!-- Present Simple -->
+                        <div id="tense-detail-pres-simple" class="tense-detail-content block space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Hiện tại đơn (Present Simple)</h3>
+                                <span class="text-xs bg-brand-500/10 text-brand-400 px-2.5 py-1 rounded-md">Khái quát: Thói quen, sự thật hiển nhiên, lịch trình</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + am/is/are + S + O?<br>
+                                        Wh- + do/does + S + V (nguyên mẫu) + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + V(s/es) | S + am/is/are</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & dấu hiệu</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Diễn tả thói quen hằng ngày, sự thật hiển nhiên.<br>
+                                        • Sự kiện theo lịch trình cố định (bản tin, chuyến tàu, webinar).<br>
+                                        • Trạng từ: <code class="text-brand-400">always, usually, often, sometimes, everyday, once a week</code>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Present Continuous -->
+                        <div id="tense-detail-pres-cont" class="tense-detail-content hidden space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Hiện tại tiếp diễn (Present Continuous)</h3>
+                                <span class="text-xs bg-violet-500/10 text-violet-400 px-2.5 py-1 rounded-md">Khái quát: Đang xảy ra lúc nói, tạm thời, phàn nàn</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + am/is/are + S + V-ing + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + am/is/are + V-ing</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & dấu hiệu</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Hành động đang diễn ra tại thời điểm nói hoặc mang tính tạm thời.<br>
+                                        • Kế hoạch cụ thể trong tương lai gần. Phàn nàn cùng với <code class="text-brand-400">"always"</code>.<br>
+                                        • Trạng từ: <code class="text-brand-400">now, at the moment, currently, Look!, Listen!</code>.<br>
+                                        • <span class="text-rose-400">Chú ý:</span> Không dùng với động từ trạng thái (know, love, want, believe, like...).
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Present Perfect -->
+                        <div id="tense-detail-pres-perf" class="tense-detail-content hidden space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Hiện tại hoàn thành (Present Perfect)</h3>
+                                <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-md">Khái quát: Kéo dài từ quá khứ đến nay, kết quả, trải nghiệm</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + have/has + S + V3/ed + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + have/has + V3/ed</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & cấu trúc kết hợp</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Diễn tả trải nghiệm cuộc sống, hành động xảy ra nhưng không rõ thời gian.<br>
+                                        • Trạng từ: <code class="text-brand-400">since (mốc), for (khoảng), yet, already, ever, never, so far</code>.<br>
+                                        • <strong class="text-emerald-400">Cấu trúc kết hợp:</strong> <br>
+                                        <code class="text-[11px] block bg-slate-900 p-1.5 rounded border border-slate-800 mt-1">S + Present Perfect + SINCE / BECAUSE + S + Past Simple</code>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Past Simple -->
+                        <div id="tense-detail-past-simple" class="tense-detail-content hidden space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Quá khứ đơn (Past Simple)</h3>
+                                <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-md">Khái quát: Đã chấm dứt hoàn toàn trong quá khứ</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + was/were + S + O?<br>
+                                        Wh- + did + S + V (nguyên mẫu) + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + V2/ed | S + was/were</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & dấu hiệu</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Hành động đã kết thúc trong quá khứ, chuỗi hành động liên tục trong quá khứ.<br>
+                                        • Cắt ngang một hành động khác đang xảy ra (kết hợp với thì QKTD).<br>
+                                        • Trạng từ: <code class="text-brand-400">yesterday, last night/week, ago, in 2025, in the past</code>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Future Simple -->
+                        <div id="tense-detail-fut-simple" class="tense-detail-content hidden space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Tương lai đơn (Future Simple)</h3>
+                                <span class="text-xs bg-sky-500/10 text-sky-400 px-2.5 py-1 rounded-md">Khái quát: Quyết định tức thời, dự đoán không căn cứ</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + will/shall + S + V (nguyên mẫu) + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + will + V (nguyên mẫu)</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & dấu hiệu</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Đưa ra quyết định tức thì ngay lúc nói.<br>
+                                        • Đưa ra dự đoán không có căn cứ/dấu hiệu thực tế, lời hứa, đề nghị, cảnh báo.<br>
+                                        • Trạng từ: <code class="text-brand-400">tomorrow, next week, soon, in the future</code>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Near Future -->
+                        <div id="tense-detail-near-fut" class="tense-detail-content hidden space-y-4">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">Tương lai gần (Near Future)</h3>
+                                <span class="text-xs bg-teal-500/10 text-teal-400 px-2.5 py-1 rounded-md">Khái quát: Dự định lên kế hoạch trước, dự đoán có căn cứ</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Cấu trúc câu nghi vấn Wh-</h4>
+                                    <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-brand-300">
+                                        Wh- + am/is/are + S + going to + V (nguyên mẫu) + O?
+                                    </div>
+                                    <p class="text-xs text-slate-400"><strong class="text-slate-300">Khẳng định:</strong> S + am/is/are + going to + V (nguyên mẫu)</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">Trường hợp áp dụng & dấu hiệu</h4>
+                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                        • Kế hoạch hoặc dự định đã lên lịch sẵn trước thời điểm nói.<br>
+                                        • Đưa ra dự đoán dựa trên hiện tượng, dấu hiệu thực tế hiện tại.<br>
+                                        • Trạng từ: <code class="text-brand-400">look at those clouds, soon, next month with planned dates</code>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHỦ ĐIỂM 3 & 4: COMPARATIVES & CONDITIONALS -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- So sánh (Comparatives & Superlatives) -->
+                <div id="sec-comparisons" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24 flex flex-col justify-between">
+                    <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded text-xs font-bold text-amber-400">03</span>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="bar-chart" class="w-5 h-5 text-amber-400"></i> Cấu Trúc So Sánh (Comparatives)
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-4 flex-grow">
+                        <!-- Comparatives table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[10px]">
+                                    <tr>
+                                        <th class="p-2.5 border border-slate-800">Dạng</th>
+                                        <th class="p-2.5 border border-slate-800">Tính từ ngắn</th>
+                                        <th class="p-2.5 border border-slate-800">Tính từ dài</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-800 bg-slate-950/40">
+                                        <td class="p-2.5 font-semibold text-white border-r border-slate-800">So sánh hơn (2 ĐT)</td>
+                                        <td class="p-2.5 border-r border-slate-800"><code class="text-amber-400">adj-er + than</code></td>
+                                        <td class="p-2.5"><code class="text-amber-400">more/less + adj + than</code></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800">
+                                        <td class="p-2.5 font-semibold text-white border-r border-slate-800">So sánh nhất (3+ ĐT)</td>
+                                        <td class="p-2.5 border-r border-slate-800"><code class="text-amber-400">the + adj-est</code></td>
+                                        <td class="p-2.5"><code class="text-amber-400">the most/least + adj</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Irregulars & Double Comparative -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">Trường hợp bất quy tắc</h4>
+                                <ul class="text-[11px] space-y-1 text-slate-300 font-mono">
+                                    <li>• Good → Better → Best</li>
+                                    <li>• Bad → Worse → Worst</li>
+                                    <li>• Far → Farther/Further → Furthest</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">So sánh đồng tiến (Càng... càng)</h4>
+                                <div class="text-[11px] text-slate-300 leading-relaxed">
+                                    Cấu trúc: <code class="text-amber-400">The + comparative, the + comparative</code>
+                                    <p class="mt-1 text-slate-400 italic">Ví dụ: The clearer the plan, the faster the team works.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 bg-slate-950/40 border-t border-slate-800/80 text-center">
+                        <span class="text-xs text-slate-400">Luyện so sánh ngay tại <strong class="text-amber-400 cursor-pointer" onclick="switchTab('practice')">Sân Luyện Tập</strong></span>
+                    </div>
+                </div>
+
+                <!-- Câu điều kiện (Conditionals) -->
+                <div id="sec-conditionals" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24 flex flex-col justify-between">
+                    <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-xs font-bold text-emerald-400">04</span>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="git-branch" class="w-5 h-5 text-emerald-400"></i> Câu Điều Kiện & Đảo Ngữ
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-3 flex-grow">
+                        <!-- Types Accordion/Grid -->
+                        <div class="space-y-2">
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                                <div class="flex justify-between font-semibold text-white">
+                                    <span>Loại 0: Sự thật hiển nhiên</span>
+                                    <span class="text-emerald-400">If + Present Simple, Present Simple</span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                                <div class="flex justify-between font-semibold text-white">
+                                    <span>Loại 1: Có thể xảy ra ở tương lai</span>
+                                    <span class="text-emerald-400">If + Present, S + will/can + V0</span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                                <div class="flex justify-between font-semibold text-white">
+                                    <span>Loại 2: Không có thật ở hiện tại</span>
+                                    <span class="text-emerald-400">If + V2/ed (tobe were), S + would + V0</span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                                <div class="flex justify-between font-semibold text-white">
+                                    <span>Loại 3: Không có thật ở quá khứ</span>
+                                    <span class="text-emerald-400">If + Had + V3, S + would + have + V3</span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                                <div class="flex justify-between font-semibold text-white text-[11px] sm:text-xs">
+                                    <span>Loại 4 (Hỗn hợp): Trái QK, kết quả trái HT</span>
+                                    <span class="text-emerald-400">If + Had + V3, S + would + V0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inversion & Alternatives -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800/80 text-[11px]">
+                                <h4 class="font-bold text-slate-400 uppercase tracking-wide mb-1">Đảo ngữ (Inversion)</h4>
+                                <p class="text-slate-300">Thay "If" bằng cách đảo trợ động từ lên trước:</p>
+                                <span class="text-emerald-400 block font-mono mt-1">
+                                    • L1: Should + S + V0...<br>
+                                    • L2: Were + S... / Were S to V0...<br>
+                                    • L3: Had + S + V3...
+                                </span>
+                            </div>
+                            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800/80 text-[11px]">
+                                <h4 class="font-bold text-slate-400 uppercase tracking-wide mb-1">Thay thế "If"</h4>
+                                <ul class="text-slate-300 space-y-0.5">
+                                    <li>• <strong class="text-emerald-400">Unless</strong> = If... not (Trừ phi)</li>
+                                    <li>• <strong class="text-emerald-400">Without + N</strong> (Nếu không có)</li>
+                                    <li>• <strong class="text-emerald-400">In case</strong> (Phòng khi)</li>
+                                    <li>• <strong class="text-emerald-400">Provided that / Suppose</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 bg-slate-950/40 border-t border-slate-800/80 text-center">
+                        <span class="text-xs text-slate-400">Thực hành trộn câu điều kiện tại <strong class="text-emerald-400 cursor-pointer" onclick="switchTab('practice')">Sân Luyện Tập</strong></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CHỦ ĐIỂM 5 & 6: MODALS & COMMUNICATIVE -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Động từ khiếm khuyết (Modal Verbs) -->
+                <div id="sec-modals" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24">
+                    <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-violet-500/10 border border-violet-500/30 rounded text-xs font-bold text-violet-400">05</span>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-violet-400"></i> Động Từ Khiếm Khuyết (Modal Verbs)
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="p-3 bg-brand-500/10 border border-brand-500/20 text-xs rounded-xl text-brand-300 font-medium">
+                            Quy tắc cốt lõi: Luôn đi cùng với Động từ nguyên mẫu không "to" <code class="bg-slate-950 px-2 py-0.5 rounded text-white font-mono border border-slate-800">S + Modal Verb + V0</code>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2 flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5 text-rose-400"></i> MUST / MUSTN'T</span>
+                                <p class="text-[11px] text-slate-300">Bắt buộc phải làm (do chủ quan) hoặc cấm đoán tuyệt đối.</p>
+                                <span class="text-[10px] text-slate-400 block mt-2">Ví dụ: You mustn't modify database config without approval.</span>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2 flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400"></i> HAVE TO / DON'T HAVE TO</span>
+                                <p class="text-[11px] text-slate-300">Bắt buộc do yếu tố bên ngoài/quy định hoặc không cần thiết phải làm.</p>
+                                <span class="text-[10px] text-slate-400 block mt-2">Ví dụ: I don't have to code in Assembly.</span>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2 flex items-center gap-1.5"><i data-lucide="battery" class="w-3.5 h-3.5 text-emerald-400"></i> CAN / CAN'T</span>
+                                <p class="text-[11px] text-slate-300">Biểu thị khả năng hiện tại, sự cho phép hoặc không thể thực hiện.</p>
+                                <span class="text-[10px] text-slate-400 block mt-2">Ví dụ: I can configure AWS but I can't deploy it alone.</span>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2 flex items-center gap-1.5"><i data-lucide="help-circle" class="w-3.5 h-3.5 text-sky-400"></i> SHOULD / SHOULDN'T</span>
+                                <p class="text-[11px] text-slate-300">Dùng đưa ra lời khuyên nên/không nên làm điều gì.</p>
+                                <span class="text-[10px] text-slate-400 block mt-2">Ví dụ: You should refactor duplicate API calls.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Giao tiếp khác -->
+                <div id="sec-communicative" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden scroll-mt-24">
+                    <div class="p-6 border-b border-slate-800 bg-slate-900/50 flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-xs font-bold text-emerald-400">06</span>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="message-square" class="w-5 h-5 text-emerald-400"></i> Cấu Trúc Giao Tiếp Thường Nhật
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Have Got -->
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2">Have got (Sở hữu)</span>
+                                <p class="text-[11px] text-slate-300">Tương đương "Have/Has" ở Hiện tại đơn nhưng thân mật hơn (văn nói).</p>
+                                <span class="text-[10px] text-brand-400 block font-mono mt-1">S + have/has got + O | Have/Has + S + got...?</span>
+                            </div>
+                            <!-- There is / there are -->
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2">Sự tồn tại (There is/are)</span>
+                                <p class="text-[11px] text-slate-300">Có vật gì đó ở đâu. There is (số ít/không đếm), There are (số nhiều).</p>
+                                <span class="text-[10px] text-brand-400 block font-mono mt-1">Ví dụ: There is a bug in my main component.</span>
+                            </div>
+                            <!-- Quantifiers -->
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2">Từ chỉ số lượng (Quantifiers)</span>
+                                <ul class="text-[11px] text-slate-300 space-y-0.5">
+                                    <li>• <strong class="text-slate-400">Đếm được:</strong> Many, a few, few</li>
+                                    <li>• <strong class="text-slate-400">Không đếm:</strong> Much, a little, little</li>
+                                    <li>• <strong class="text-slate-400">Cả hai:</strong> Some, any, a lot of, plenty of</li>
+                                </ul>
+                            </div>
+                            <!-- Linking & Prepositions -->
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <span class="text-xs font-bold text-white block border-b border-slate-800 pb-1.5 mb-2">Từ nối & Giới từ (Links & Preps)</span>
+                                <ul class="text-[11px] text-slate-300 space-y-0.5">
+                                    <li>• <strong class="text-slate-400">Quy trình:</strong> First, Next, Then, Finally.</li>
+                                    <li>• <strong class="text-slate-400">Mối liên hệ:</strong> And (bổ sung), But (đối lập), So (kết quả).</li>
+                                    <li>• <strong class="text-slate-400">Giới từ:</strong> At (giờ), In (không gian), For (vì ai).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: INTERACTIVE PLAYGROUND (SÂN LUYỆN TẬP) ==================== -->
+        <section id="tab-content-practice" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                    <i data-lucide="activity" class="w-6 h-6 text-brand-400"></i> Phòng Thực Hành Ngữ Pháp Tương Tác
+                </h2>
+                <p class="text-sm text-slate-400">Nơi biến lý thuyết trừu tượng thành trải nghiệm trực quan dễ nhớ.</p>
+            </div>
+
+            <!-- Wh- Question Builder Playground -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Sandbox 1: Wh- Builder -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-800 bg-slate-900/50">
+                        <h3 class="font-bold text-white flex items-center gap-2">
+                            <i data-lucide="shuffle" class="w-4 h-4 text-brand-400"></i> 1. Sắp xếp từ tạo Câu hỏi Wh-
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Bấm các mảnh từ dưới đây theo đúng thứ tự cấu trúc ngữ pháp</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <!-- Clue -->
+                        <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-brand-400 font-bold uppercase block tracking-wider">Gợi ý tiếng Việt:</span>
+                            <span id="wh-clue-vi" class="text-sm text-white font-medium mt-1 block">"Bạn dùng trang web này để làm gì?"</span>
+                        </div>
+
+                        <!-- Target dropzone -->
+                        <div class="min-h-[60px] p-3 bg-slate-950 rounded-xl border-2 border-dashed border-slate-800 flex flex-wrap gap-2 items-center" id="wh-builder-target">
+                            <!-- Selected words go here -->
+                        </div>
+
+                        <!-- Word bank pool -->
+                        <div class="flex flex-wrap gap-2" id="wh-builder-source">
+                            <!-- Scrambled words go here -->
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center gap-3">
+                            <button onclick="checkWhQuestion()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1">
+                                <i data-lucide="check" class="w-4 h-4"></i> Kiểm tra
+                            </button>
+                            <button onclick="resetWhQuestion()" class="px-4 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold transition border border-slate-800 flex items-center gap-1">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Làm lại
+                            </button>
+                            <span id="wh-builder-feedback" class="text-xs font-medium"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sandbox 2: Conditional Clause Mixer -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-800 bg-slate-900/50">
+                        <h3 class="font-bold text-white flex items-center gap-2">
+                            <i data-lucide="git-merge" class="w-4 h-4 text-emerald-400"></i> 2. Conditional Sentence Mixer
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Lắp ráp các vế của câu điều kiện để tìm sự kết hợp tương thích</p>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <!-- Select Tense / Conditional Type -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase block tracking-wider mb-1.5">Mệnh đề điều kiện (If Clause)</label>
+                                <select id="cond-if-select" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500" onchange="matchConditionalMixer()">
+                                    <option value="">-- Chọn thì vế IF --</option>
+                                    <option value="pres-simple">If + Present Simple (Hiện tại đơn)</option>
+                                    <option value="past-simple">If + Past Simple (Quá khứ đơn)</option>
+                                    <option value="past-perfect">If + Past Perfect (Had + V3)</option>
+                                    <option value="should">Should + S + V0... (Đảo ngữ loại 1)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase block tracking-wider mb-1.5">Mệnh đề chính (Main Clause)</label>
+                                <select id="cond-main-select" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500" onchange="matchConditionalMixer()">
+                                    <option value="">-- Chọn dạng vế chính --</option>
+                                    <option value="will-v0">S + will/can + V0</option>
+                                    <option value="would-v0">S + would/could + V0</option>
+                                    <option value="would-have-v3">S + would have + V3</option>
+                                    <option value="pres-simple">S + Present Simple</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Result Card -->
+                        <div id="cond-mixer-card" class="p-4 bg-slate-950 rounded-xl border border-slate-800/80 space-y-2 flex flex-col justify-between min-h-[140px]">
+                            <div>
+                                <span class="text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded" id="cond-mixer-label">Vui lòng chọn cả 2 vế</span>
+                                <p class="text-xs text-slate-300 leading-relaxed mt-2.5 font-mono" id="cond-mixer-formula">
+                                    [Công thức lắp ráp sẽ xuất hiện ở đây...]
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-900 flex items-start gap-2.5">
+                                <span class="p-1 bg-brand-500/10 rounded text-brand-400 mt-0.5"><i data-lucide="info" class="w-3.5 h-3.5"></i></span>
+                                <span class="text-[11px] text-slate-400" id="cond-mixer-explain">Hãy kết nối vế phù hợp để xem lời giải và ví dụ.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sandbox 3: AI Writing Playground -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden mt-6">
+                <div class="p-5 border-b border-slate-800 bg-slate-900/50">
+                    <h3 class="font-bold text-white flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 3. Phòng Luyện Viết Thần Tốc ✨
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Viết một câu hoặc đoạn văn tiếng Anh liên quan đến công nghệ/đời sống. AI sẽ kiểm tra lỗi sai cấu trúc và nâng cấp lên văn phong xịn hơn.</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <textarea id="ai-write-input" rows="3" placeholder="Ví dụ: If we had backed up the database yesterday, we wouldn't has lost the data... hoặc The clearer the design, the more fast the user understand." class="w-full bg-slate-950 border border-slate-800 focus:outline-none focus:border-brand-500 rounded-xl p-4 text-xs text-white placeholder-slate-600 focus:ring-1 focus:ring-brand-500"></textarea>
+                    
+                    <div class="flex items-center gap-3">
+                        <button onclick="analyzeWriting()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> ✨ AI Chấm Điểm & Nâng Cấp Câu
+                        </button>
+                        <button onclick="document.getElementById('ai-write-input').value = ''" class="px-3 py-2 bg-slate-850 hover:bg-slate-800 text-slate-400 rounded-lg text-xs transition border border-slate-800">Xóa bài</button>
+                    </div>
+
+                    <!-- Analysis Result Container -->
+                    <div id="ai-write-result" class="hidden p-5 bg-slate-950 rounded-xl border border-slate-800 space-y-4 animate-fadeIn">
+                        <!-- Dynamic analysis happens here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: QUIZ ARENA (ĐẤU TRƯỜNG QUIZ) ==================== -->
+        <section id="tab-content-quiz" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Scoreboard & Controls Left -->
+                <div class="space-y-6">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-amber-500/10 rounded-xl text-amber-400">
+                                <i data-lucide="award" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-white">Quiz Arena</h2>
+                                <p class="text-xs text-slate-400">Hệ thống trắc nghiệm thích ứng</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+                                <span class="text-[10px] text-slate-400 block uppercase">Hoàn Thành</span>
+                                <span id="quiz-stat-completed" class="text-xl font-extrabold text-white">0/10</span>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+                                <span class="text-[10px] text-slate-400 block uppercase">Điểm Chính Xác</span>
+                                <span id="quiz-stat-accuracy" class="text-xl font-extrabold text-emerald-400">0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Topics filter checkboxes -->
+                        <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase block tracking-wider">Cài đặt chủ đề ôn luyện</label>
+                            <div class="space-y-1.5">
+                                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="qfilter-wh" checked class="rounded border-slate-800 text-brand-600 bg-slate-950 focus:ring-0"> Câu hỏi Wh- Questions
+                                </label>
+                                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="qfilter-tenses" checked class="rounded border-slate-800 text-brand-600 bg-slate-950 focus:ring-0"> 6 Thì Ngữ Pháp Cốt Lõi
+                                </label>
+                                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="qfilter-comp" checked class="rounded border-slate-800 text-brand-600 bg-slate-950 focus:ring-0"> Cấu trúc so sánh
+                                </label>
+                                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="qfilter-cond" checked class="rounded border-slate-800 text-brand-600 bg-slate-950 focus:ring-0"> Câu điều kiện & Đảo ngữ
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                            <button onclick="startNewQuizSession()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold tracking-wide transition flex items-center justify-center gap-2 shadow-sm">
+                                <i data-lucide="play" class="w-4 h-4"></i> Làm Mới Đấu Trường Quiz
+                            </button>
+                            
+                            <button onclick="generateAIQuestion()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i> ✨ Tạo Đề Trắc Nghiệm AI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Question Box Right -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[420px]" id="quiz-question-container">
+                    <!-- Dynamic rendering happens here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: AI TUTOR (GIA SƯ AI TRỰC TUYẾN) ==================== -->
+        <section id="tab-content-ai-tutor" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Info & Prompts Box Left -->
+                <div class="space-y-6">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400">
+                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-white">Grammar AI Co-Pilot</h2>
+                                <p class="text-xs text-slate-400">Phát triển bởi Gemini 2.5 Flash</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Trợ lý thông minh phân tích cú pháp, giải thích chi tiết lỗi sai và có thể biên soạn bài tập tùy chỉnh dựa trên hệ thống 6 chủ điểm ngữ pháp.
+                        </p>
+
+                        <!-- Suggestion Prompt Quick Pills -->
+                        <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tính năng gợi ý (Bấm để thử)</label>
+                            <button onclick="injectPrompt('Hãy phân tích cấu trúc ngữ pháp và chỉ ra các thành phần trong câu: \'The faster the company builds the product, the better experience users have got.\'')" class="w-full p-2.5 bg-slate-950 hover:bg-slate-850 border border-slate-800/80 hover:border-slate-700 rounded-xl text-left text-xs text-slate-300 transition flex items-center gap-2">
+                                <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-400"></i> Phân tích cú pháp câu nâng cao
+                            </button>
+                            <button onclick="injectPrompt('Hãy giúp tôi sửa lỗi sai trong câu: \'If I had have more traffic, my website would have been crashed yesterday.\'')" class="w-full p-2.5 bg-slate-950 hover:bg-slate-850 border border-slate-800/80 hover:border-slate-700 rounded-xl text-left text-xs text-slate-300 transition flex items-center gap-2">
+                                <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-400"></i> Tìm lỗi & giải thích cấu trúc sai
+                            </button>
+                            <button onclick="injectPrompt('Soạn 3 câu hỏi trắc nghiệm liên quan đến trường hợp đặc biệt của cụm từ viết tắt (Acronym) với cấu trúc hỏi Wh- (What, Which, ...) kèm theo đáp án giải thích')" class="w-full p-2.5 bg-slate-950 hover:bg-slate-850 border border-slate-800/80 hover:border-slate-700 rounded-xl text-left text-xs text-slate-300 transition flex items-center gap-2">
+                                <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-400"></i> Yêu cầu soạn câu hỏi luyện tập
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Box Right -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between h-[520px]">
+                    <!-- Chat Messages list -->
+                    <div class="p-6 overflow-y-auto flex-grow space-y-4" id="ai-chat-messages">
+                        <!-- Bot intro -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                                <i data-lucide="bot" class="w-4 h-4"></i>
+                            </div>
+                            <div class="p-3.5 bg-slate-950 rounded-2xl rounded-tl-none border border-slate-800 text-xs text-slate-300 max-w-[85%] leading-relaxed">
+                                Xin chào! Tôi là Trợ Lý Ngữ Pháp AI của bạn. Bạn muốn phân tích cấu trúc câu nào, dịch câu hay cần tôi kiểm tra câu hỏi Wh-, câu điều kiện và tenses? Hãy gõ hoặc chọn gợi ý bên trái nhé!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Bar -->
+                    <div class="p-4 bg-slate-950 border-t border-slate-800 flex items-center gap-2">
+                        <input type="text" id="ai-chat-input" placeholder="Nhập câu hỏi ngữ pháp hoặc câu cần phân tích ở đây..." class="flex-grow bg-slate-900 border border-slate-800 focus:outline-none focus:border-emerald-500 rounded-xl px-4 py-3 text-xs text-white" onkeydown="if(event.key === 'Enter') sendAIChatMessage()">
+                        <button onclick="sendAIChatMessage()" class="p-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition shadow-lg shadow-emerald-500/10 flex items-center justify-center">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800 bg-slate-900/50 py-6 px-4 lg:px-8 mt-12">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-xs text-slate-500">&copy; 2026 Interactive Grammar Matrix. Thiết kế bởi Chuyên gia Front-end & Systems Architect.</span>
+            <div class="flex items-center gap-4 text-xs text-slate-400">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Dynamic Sandbox</span>
+                <span class="text-slate-600">|</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5"></i> Powered by Gemini 2.5 Flash</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // 1. Initial State & Setup
+        window.onload = function() {
+            // Set the correct initial theme icon
+            const isDark = document.documentElement.classList.contains('dark');
+            const iconBtn = document.getElementById('theme-toggle-btn');
+            if (iconBtn) {
+                iconBtn.innerHTML = `<i data-lucide="${isDark ? 'sun' : 'moon'}" class="w-4 h-4"></i>`;
+            }
+
+            lucide.createIcons();
+            initWhBuilder();
+            matchConditionalMixer();
+            startNewQuizSession();
+        }
+
+        // Toggle Theme Mode Function
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            const iconBtn = document.getElementById('theme-toggle-btn');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                if (iconBtn) {
+                    iconBtn.innerHTML = `<i data-lucide="moon" class="w-4 h-4"></i>`;
+                }
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                if (iconBtn) {
+                    iconBtn.innerHTML = `<i data-lucide="sun" class="w-4 h-4"></i>`;
+                }
+            }
+            lucide.createIcons();
+        }
+
+        const apiKey = ""; // Runtime automatically populated via Gemini API Specs
+
+        // Unified Gemini API Fetcher with Exponential Backoff
+        async function callGeminiAPI(prompt, systemInstruction, responseSchema = null) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            let payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            if (responseSchema) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json",
+                    responseSchema: responseSchema
+                };
+            }
+
+            let retryCount = 0;
+            const maxRetries = 5;
+            
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    retryCount++;
+                    if (retryCount >= maxRetries) {
+                        throw error;
+                    }
+                    const delay = Math.pow(2, retryCount) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Remove active classes on nav
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200";
+            });
+
+            // Show target content
+            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+            
+            // Set active class on clicked button
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (tabId === 'ai-tutor') {
+                activeBtn.className = "tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-emerald-600 text-white shadow-sm shadow-emerald-500/20";
+            } else {
+                activeBtn.className = "tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-brand-600 text-white shadow-sm shadow-brand-500/20";
+            }
+        }
+
+        function scrollToSection(secId) {
+            document.getElementById(secId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Tenses Detail Switcher
+        function showTenseDetail(tenseKey) {
+            // Hide all details
+            document.querySelectorAll('.tense-detail-content').forEach(el => el.classList.add('hidden'));
+            // Reset buttons style
+            document.querySelectorAll('.tense-tab-btn').forEach(btn => {
+                btn.className = "tense-tab-btn p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold text-center hover:border-slate-700 transition";
+            });
+
+            // Show target detail & set active button style
+            document.getElementById(`tense-detail-${tenseKey}`).classList.remove('hidden');
+            document.getElementById(`tb-${tenseKey}`).className = "tense-tab-btn p-3 bg-slate-950 rounded-xl border border-brand-500 text-xs font-semibold text-brand-400 text-center transition";
+        }
+
+
+        // ==================== SANDBOX 1: WH- QUESTION BUILDER ====================
+        const whQuestionsPool = [
+            {
+                vi: "Bạn dùng trang web này để làm gì?",
+                correct: ["What", "do", "you", "use", "this", "website", "for", "?"],
+                scrambled: ["you", "What", "website", "do", "for", "use", "this", "?"]
+            },
+            {
+                vi: "HTML viết tắt của từ gì?",
+                correct: ["What", "does", "HTML", "stand", "for", "?"],
+                scrambled: ["for", "What", "does", "?", "HTML", "stand"]
+            },
+            {
+                vi: "Họ lưu lại trên website của bạn trong bao lâu?",
+                correct: ["How", "long", "do", "they", "stay", "on", "your", "website", "?"],
+                scrambled: ["stay", "they", "on", "How", "website", "do", "your", "long", "?"]
+            },
+            {
+                vi: "Trang web này đón bao nhiêu lượt khách truy cập?",
+                correct: ["How", "many", "visitors", "does", "this", "website", "get", "?"],
+                scrambled: ["visitors", "How", "?", "this", "get", "many", "does", "website"]
+            }
+        ];
+
+        let currentWhIndex = 0;
+        let selectedWhWords = [];
+
+        function initWhBuilder() {
+            const currentQ = whQuestionsPool[currentWhIndex];
+            document.getElementById('wh-clue-vi').textContent = `"${currentQ.vi}"`;
+            selectedWhWords = [];
+            renderWhWords();
+        }
+
+        function renderWhWords() {
+            const currentQ = whQuestionsPool[currentWhIndex];
+            const targetContainer = document.getElementById('wh-builder-target');
+            const sourceContainer = document.getElementById('wh-builder-source');
+            
+            // Render selected target words
+            targetContainer.innerHTML = '';
+            if (selectedWhWords.length === 0) {
+                targetContainer.innerHTML = `<span class="text-xs text-slate-600 italic select-none">Mảnh từ ghép sẽ nằm ở đây...</span>`;
+            } else {
+                selectedWhWords.forEach((word, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "px-3 py-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-300 border border-brand-500/30 rounded-lg text-xs font-mono transition flex items-center gap-1";
+                    btn.innerHTML = `${word} <i data-lucide="x" class="w-3 h-3 text-brand-400"></i>`;
+                    btn.onclick = () => removeWordFromBuilder(idx);
+                    targetContainer.appendChild(btn);
+                });
+            }
+
+            // Render source word bank (exclude already selected words by value counting)
+            sourceContainer.innerHTML = '';
+            
+            // Build current remaining pool
+            let remainingWords = [...currentQ.scrambled];
+            selectedWhWords.forEach(selected => {
+                const index = remainingWords.indexOf(selected);
+                if (index > -1) {
+                    remainingWords.splice(index, 1);
+                }
+            });
+
+            remainingWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = "px-3 py-2 bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 hover:border-slate-700 rounded-lg text-xs font-mono transition";
+                btn.textContent = word;
+                btn.onclick = () => addWordToBuilder(word);
+                sourceContainer.appendChild(btn);
+            });
+
+            lucide.createIcons();
+            // Reset feedback style
+            document.getElementById('wh-builder-feedback').textContent = '';
+        }
+
+        function addWordToBuilder(word) {
+            selectedWhWords.push(word);
+            renderWhWords();
+        }
+
+        function removeWordFromBuilder(index) {
+            selectedWhWords.splice(index, 1);
+            renderWhWords();
+        }
+
+        function checkWhQuestion() {
+            const currentQ = whQuestionsPool[currentWhIndex];
+            const feedbackEl = document.getElementById('wh-builder-feedback');
+            
+            const isCorrect = selectedWhWords.length === currentQ.correct.length && 
+                              selectedWhWords.every((word, i) => word === currentQ.correct[i]);
+
+            if (isCorrect) {
+                feedbackEl.className = "text-xs font-medium text-emerald-400 flex items-center gap-1";
+                feedbackEl.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 shrink-0"></i> Chính xác! Tuyệt vời.`;
+                
+                // Move to next after a delay
+                setTimeout(() => {
+                    currentWhIndex = (currentWhIndex + 1) % whQuestionsPool.length;
+                    initWhBuilder();
+                }, 1800);
+            } else {
+                feedbackEl.className = "text-xs font-medium text-rose-400 flex items-center gap-1";
+                feedbackEl.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i> Sai rồi, hãy thử sắp xếp lại nhé!`;
+            }
+            lucide.createIcons();
+        }
+
+        function resetWhQuestion() {
+            selectedWhWords = [];
+            renderWhWords();
+        }
+
+
+        // ==================== SANDBOX 2: CONDITIONAL CLAUSE MIXER ====================
+        function matchConditionalMixer() {
+            const ifVal = document.getElementById('cond-if-select').value;
+            const mainVal = document.getElementById('cond-main-select').value;
+            const formulaEl = document.getElementById('cond-mixer-formula');
+            const labelEl = document.getElementById('cond-mixer-label');
+            const explainEl = document.getElementById('cond-mixer-explain');
+
+            if (!ifVal || !mainVal) {
+                formulaEl.textContent = "[Công thức lắp ráp sẽ xuất hiện ở đây...]";
+                labelEl.textContent = "Chưa hoàn thiện";
+                labelEl.className = "text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded";
+                explainEl.textContent = "Hãy kết nối vế phù hợp để xem lời giải và ví dụ cụ thể.";
+                return;
+            }
+
+            // Define conditional matrices and responses
+            let state = "invalid";
+            let formulaText = "";
+            let labelText = "";
+            let explainText = "";
+
+            if (ifVal === 'pres-simple' && mainVal === 'pres-simple') {
+                state = "valid";
+                labelText = "Câu Điều Kiện Loại 0";
+                formulaText = "If + S + V(s/es) (Hiện tại đơn) , S + V(s/es) (Hiện tại đơn)";
+                explainText = "Sự thật hiển nhiên, chân lý khoa học. Ví dụ: If you heat ice, it melts.";
+            } else if (ifVal === 'pres-simple' && mainVal === 'will-v0') {
+                state = "valid";
+                labelText = "Câu Điều Kiện Loại 1";
+                formulaText = "If + S + V(s/es) , S + will/can/should + V0";
+                explainText = "Sự việc hoàn toàn có thể xảy ra ở hiện tại hoặc tương lai. Ví dụ: If the traffic is good, I will arrive on time.";
+            } else if (ifVal === 'should' && mainVal === 'will-v0') {
+                state = "valid";
+                labelText = "Đảo Ngữ Loại 1";
+                formulaText = "Should + S + V0... , S + will/can + V0";
+                explainText = "Mức độ trang trọng cao hơn. Ví dụ: Should you need any support, our DevOps team will respond immediately.";
+            } else if (ifVal === 'past-simple' && mainVal === 'would-v0') {
+                state = "valid";
+                labelText = "Câu Điều Kiện Loại 2";
+                formulaText = "If + S + V2/ed (tobe were) , S + would/could + V0";
+                explainText = "Giả thiết trái với thực tế hiện tại. Ví dụ: If I were a rich entrepreneur, I would scale this platform globally.";
+            } else if (ifVal === 'past-perfect' && mainVal === 'would-have-v3') {
+                state = "valid";
+                labelText = "Câu Điều Kiện Loại 3";
+                formulaText = "If + S + Had + V3/ed , S + would have + V3/ed";
+                explainText = "Giả thiết trái thực tế quá khứ (sự hối tiếc). Ví dụ: If we had backed up the database, we would not have lost the user tables.";
+            } else if (ifVal === 'past-perfect' && mainVal === 'would-v0') {
+                state = "valid";
+                labelText = "Câu Điều Kiện Hỗn Hợp (Loại 4)";
+                formulaText = "If + S + Had + V3/ed , S + would + V0";
+                explainText = "Giả thiết trái quá khứ nhưng để lại kết quả trái hiện tại. Ví dụ: If you had studied JavaScript last week, you would know how to fix this component now.";
+            } else {
+                state = "mismatch";
+                labelText = "Sai cấu trúc phối hợp";
+                formulaText = "SỰ KẾT HỢP KHÔNG HỢP LỆ VỀ THÌ & NGỮ PHÁP!";
+                explainText = "Vui lòng điều chỉnh lại vế If và vế Chính để tạo thành một tổ hợp câu điều kiện đúng chuẩn.";
+            }
+
+            // Apply classes based on matching state
+            if (state === "valid") {
+                labelEl.className = "text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-2 py-0.5 rounded font-bold";
+                formulaEl.className = "text-xs text-emerald-300 font-mono mt-2.5 leading-relaxed";
+            } else if (state === "mismatch") {
+                labelEl.className = "text-[10px] bg-rose-500/10 border border-rose-500/30 text-rose-400 px-2 py-0.5 rounded font-bold";
+                formulaEl.className = "text-xs text-rose-300 font-mono mt-2.5 leading-relaxed";
+            } else {
+                labelEl.className = "text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded";
+                formulaEl.className = "text-xs text-slate-300 font-mono mt-2.5 leading-relaxed";
+            }
+
+            labelEl.textContent = labelText;
+            formulaEl.textContent = formulaText;
+            explainEl.textContent = explainText;
+        }
+
+
+        // ==================== SANDBOX 3: AI WRITING LAB ====================
+        async function analyzeWriting() {
+            const inputVal = document.getElementById('ai-write-input').value.trim();
+            const resultBox = document.getElementById('ai-write-result');
+            
+            if (!inputVal) {
+                resultBox.classList.remove('hidden');
+                resultBox.innerHTML = `
+                    <div class="text-xs text-rose-400 flex items-center gap-1.5">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i> Vui lòng nhập nội dung câu/đoạn văn cần kiểm tra trước khi phân tích.
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = `
+                <div class="flex items-center gap-3 text-xs text-slate-400">
+                    <i data-lucide="loader" class="w-4 h-4 animate-spin text-emerald-400"></i>
+                    <span>Đang gọi Trí tuệ nhân tạo Gemini phân tích văn bản...</span>
+                </div>
+            `;
+            lucide.createIcons();
+
+            const prompt = `Hãy phân tích bài viết/câu này của học viên: "${inputVal}".
+Hãy kiểm tra xem họ có áp dụng đúng ngữ pháp liên quan đến 6 chủ điểm này không:
+1. Wh- questions, 2. Tenses, 3. Comparatives (so sánh), 4. Conditional (điều kiện), 5. Modal Verbs, 6. Sở hữu & giao tiếp thông dụng.
+
+Phản hồi dưới dạng báo cáo chi tiết bằng tiếng Việt:
+- Chấm điểm ngữ pháp (Thang điểm 1-10)
+- Liệt kê lỗi ngữ pháp/chính tả (nếu có) và cách sửa cụ thể.
+- Nhận xét cấu trúc ngữ pháp học viên đã áp dụng thành công.
+- Phiên bản viết lại (Premium Rewrite) tối ưu hơn theo văn phong bản xứ chuẩn công nghệ/đời sống kèm bản dịch tiếng Việt.`;
+
+            const systemInstruction = "You are an Elite AI English Copywriter and Senior Grammar Evaluator. Analyze grammar inputs strictly, providing clean formatted markdown outputs in Vietnamese with clear bullet points, highlighting modified words using bold or inline codes.";
+
+            try {
+                const result = await callGeminiAPI(prompt, systemInstruction);
+                const aiResponse = result.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi từ AI.";
+                
+                resultBox.innerHTML = `
+                    <div class="border-b border-slate-800 pb-3 mb-2 flex items-center justify-between">
+                        <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Phân Tích Chi Tiết Từ AI
+                        </span>
+                        <span class="text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800 text-slate-400">Hoàn tất</span>
+                    </div>
+                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                        ${formatMarkdown(aiResponse)}
+                    </div>
+                `;
+                lucide.createIcons();
+            } catch (err) {
+                resultBox.innerHTML = `
+                    <div class="text-xs text-rose-400 flex items-center gap-1.5 p-3 bg-rose-500/5 border border-rose-500/20 rounded-lg">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0"></i> 
+                        <span>Không thể kết nối đến Trí tuệ Nhân tạo Gemini. Đã kích hoạt 5 lần thử lại nhưng thất bại. Vui lòng thử lại sau ít phút!</span>
+                    </div>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+
+        // ==================== TAB 3: ADAPTIVE QUIZ ARENA ====================
+        const quizBank = [
+            {
+                id: 1,
+                topic: "wh",
+                question: "Điền từ thích ứng để hỏi ý nghĩa từ viết tắt: 'What does CSS ______ for?'",
+                options: ["mean", "stand", "be", "define"],
+                answer: 1,
+                explain: "Cấu trúc chuẩn để hỏi ý nghĩa chữ viết tắt: 'What does [Acronym] stand for?'"
+            },
+            {
+                id: 2,
+                topic: "tenses",
+                question: "Since we launched the new server cluster, the response time ______ significantly.",
+                options: ["improved", "has improved", "improves", "is improving"],
+                answer: 1,
+                explain: "Sự kết hợp các thì: Vế chứa Since chia quá khứ đơn (launched), vế còn lại chia hiện tại hoàn thành (has improved)."
+            },
+            {
+                id: 3,
+                topic: "comp",
+                question: "Dịch nghĩa & Chọn đáp án so sánh đồng tiến đúng: 'The ______ the plan, the faster the team works.'",
+                options: ["clearest", "more clear", "clearer", "clearly"],
+                answer: 2,
+                explain: "Công thức so sánh đồng tiến: 'The + comparative (clearer - tính từ ngắn), the + comparative (faster)'."
+            },
+            {
+                id: 4,
+                topic: "cond",
+                question: "If I ______ you, I would refactor the duplicate React components.",
+                options: ["am", "was", "were", "had been"],
+                answer: 2,
+                explain: "Câu điều kiện loại 2 (giả thiết trái thực tế hiện tại): To be ở vế If luôn dùng 'were' cho mọi ngôi."
+            },
+            {
+                id: 5,
+                topic: "wh",
+                question: "We need to know _______ traffic our website receives daily to size the load balancer.",
+                options: ["how many", "how much", "how often", "how long"],
+                answer: 1,
+                explain: "Traffic là danh từ không đếm được nên dùng 'how much' để hỏi số lượng."
+            },
+            {
+                id: 6,
+                topic: "cond",
+                question: "Choose the correct Inversion of Conditional Type 3: '______ we implemented caching, our database would not have crashed.'",
+                options: ["Were", "Should", "Had", "Unless"],
+                answer: 2,
+                explain: "Đảo ngữ loại 3: Đảo 'Had' lên trước chủ ngữ thay thế If (Had we implemented = If we had implemented)."
+            },
+            {
+                id: 7,
+                topic: "tenses",
+                question: "Currently, the developers ______ the payment API integration.",
+                options: ["test", "are testing", "have tested", "tested"],
+                answer: 1,
+                explain: "Trạng từ 'Currently' chỉ hành động đang xảy ra/tiến triển tại thời điểm nói, do đó dùng Hiện tại tiếp diễn."
+            }
+        ];
+
+        let activeQuizQuestions = [];
+        let currentQuestionIdx = 0;
+        let selectedOptionIdx = null;
+        let isAnswerSubmitted = false;
+        let correctCount = 0;
+        let attemptedCount = 0;
+
+        function startNewQuizSession() {
+            // Filter questions based on checkboxes
+            const whChecked = document.getElementById('qfilter-wh').checked;
+            const tensesChecked = document.getElementById('qfilter-tenses').checked;
+            const compChecked = document.getElementById('qfilter-comp').checked;
+            const condChecked = document.getElementById('qfilter-cond').checked;
+
+            activeQuizQuestions = quizBank.filter(q => {
+                if (q.topic === 'wh' && whChecked) return true;
+                if (q.topic === 'tenses' && tensesChecked) return true;
+                if (q.topic === 'comp' && compChecked) return true;
+                if (q.topic === 'cond' && condChecked) return true;
+                return false;
+            });
+
+            // Shuffle active list
+            activeQuizQuestions.sort(() => Math.random() - 0.5);
+
+            currentQuestionIdx = 0;
+            selectedOptionIdx = null;
+            isAnswerSubmitted = false;
+            correctCount = 0;
+            attemptedCount = 0;
+
+            updateQuizStats();
+            renderActiveQuestion();
+        }
+
+        // Generate AI Question dynamically from Gemini using Structured Outputs
+        async function generateAIQuestion() {
+            const container = document.getElementById('quiz-question-container');
+            
+            // Get selected categories
+            const topicsList = [];
+            if (document.getElementById('qfilter-wh').checked) topicsList.push("Wh- questions and quantitative words");
+            if (document.getElementById('qfilter-tenses').checked) topicsList.push("Present Simple, Present Continuous, Present Perfect, Past Simple, Future, Near Future tenses");
+            if (document.getElementById('qfilter-comp').checked) topicsList.push("Comparatives, Superlatives and double progressive (The clearer, the faster)");
+            if (document.getElementById('qfilter-cond').checked) topicsList.push("Conditional clauses (Type 0-4, mixed, inversion, alternatives to If)");
+
+            if (topicsList.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center flex flex-col items-center justify-center gap-4 flex-grow">
+                        <div class="p-3 bg-rose-500/10 text-rose-400 rounded-full">
+                            <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-lg">Thiếu chủ đề</h3>
+                            <p class="text-xs text-slate-400 mt-1">Vui lòng tích chọn ít nhất một chủ đề ôn tập ở bảng bên trái trước khi thách đấu AI!</p>
+                        </div>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="p-8 text-center flex flex-col items-center justify-center gap-4 flex-grow">
+                    <div class="p-4 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 animate-pulse">
+                        <i data-lucide="sparkles" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-md">Đang kiến tạo câu hỏi độc quyền từ AI...</h3>
+                        <p class="text-xs text-slate-400 mt-1">Sử dụng Gemini 2.5 Flash để sinh đề trắc nghiệm chuẩn chỉnh.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+
+            const selectedTopicsText = topicsList.join(", ");
+            const prompt = `Hãy sinh ngẫu nhiên một câu hỏi trắc nghiệm tiếng Anh cực hay về chủ đề: [${selectedTopicsText}]. 
+Yêu cầu câu hỏi phải liên quan đến bối cảnh lập trình, công nghệ thông tin (IT), khởi nghiệp (startup) hoặc làm việc trong văn phòng. 
+Cung cấp 4 lựa chọn (options) duy nhất chỉ 1 đáp án chính xác. Trả về đúng mẫu cấu trúc JSON được yêu cầu.`;
+
+            const systemInstruction = "You are a professional IELTS and Cambridge examiner specialized in Business and Tech English. Generate challenging questions in clean English, with clear explanations written in Vietnamese.";
+
+            const schema = {
+                type: "OBJECT",
+                properties: {
+                    question: { type: "STRING" },
+                    options: {
+                        type: "ARRAY",
+                        items: { type: "STRING" }
+                    },
+                    answer: { type: "INTEGER" }, // 0 to 3
+                    explain: { type: "STRING" },
+                    topic: { type: "STRING" } // short label e.g., "cond", "tenses", "wh", "comp"
+                },
+                required: ["question", "options", "answer", "explain", "topic"]
+            };
+
+            try {
+                const response = await callGeminiAPI(prompt, systemInstruction, schema);
+                const questionData = JSON.parse(response.candidates[0].content.parts[0].text);
+                
+                // Inject the AI question into active quiz queue
+                questionData.id = "ai-" + Date.now();
+                activeQuizQuestions.splice(currentQuestionIdx, 0, questionData);
+                
+                // Render the newly injected AI question
+                renderActiveQuestion();
+            } catch (err) {
+                container.innerHTML = `
+                    <div class="p-8 text-center flex flex-col items-center justify-center gap-4 flex-grow bg-rose-950/20">
+                        <div class="p-3 bg-rose-500/10 text-rose-400 rounded-full">
+                            <i data-lucide="alert-circle" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-md">Không thể tải đề thi từ AI</h3>
+                            <p class="text-xs text-slate-400 mt-1">Có lỗi xảy ra khi phân tích cú pháp hoặc kết nối API. Vui lòng bấm thử lại.</p>
+                        </div>
+                        <button onclick="generateAIQuestion()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold">Thử lại</button>
+                    </div>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        function updateQuizStats() {
+            const completedEl = document.getElementById('quiz-stat-completed');
+            const accuracyEl = document.getElementById('quiz-stat-accuracy');
+            
+            completedEl.textContent = `${attemptedCount}/${activeQuizQuestions.length}`;
+            if (attemptedCount > 0) {
+                accuracyEl.textContent = `${Math.round((correctCount / attemptedCount) * 100)}%`;
+            } else {
+                accuracyEl.textContent = "0%";
+            }
+        }
+
+        function renderActiveQuestion() {
+            const container = document.getElementById('quiz-question-container');
+            
+            if (activeQuizQuestions.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center flex flex-col items-center justify-center gap-4 flex-grow">
+                        <div class="p-3 bg-rose-500/10 text-rose-400 rounded-full">
+                            <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-lg">Không có câu hỏi được chọn</h3>
+                            <p class="text-xs text-slate-400 mt-1">Vui lòng tích chọn ít nhất một chủ đề ôn tập ở bảng cấu hình bên trái.</p>
+                        </div>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            if (currentQuestionIdx >= activeQuizQuestions.length) {
+                container.innerHTML = `
+                    <div class="p-8 text-center flex flex-col items-center justify-center gap-4 flex-grow bg-slate-900/40">
+                        <div class="p-4 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">
+                            <i data-lucide="smile" class="w-10 h-10"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-lg">Hoàn thành lượt câu hỏi!</h3>
+                            <p class="text-xs text-slate-400 mt-1">Kết quả: ${correctCount}/${attemptedCount} câu trả lời chính xác.</p>
+                        </div>
+                        <button onclick="startNewQuizSession()" class="mt-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold transition">
+                            Chơi lại từ đầu
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            const currentQ = activeQuizQuestions[currentQuestionIdx];
+
+            let optionsHtml = currentQ.options.map((opt, idx) => {
+                let borderClass = "border-slate-800 bg-slate-950 hover:border-slate-700 hover:bg-slate-900/60";
+                let iconClass = "text-slate-600";
+                let iconName = "circle";
+
+                if (selectedOptionIdx === idx) {
+                    borderClass = "border-brand-500 bg-brand-500/10 text-brand-300";
+                    iconClass = "text-brand-400";
+                    iconName = "check-circle-2";
+                }
+
+                if (isAnswerSubmitted) {
+                    if (idx === currentQ.answer) {
+                        borderClass = "border-emerald-500 bg-emerald-500/10 text-emerald-300";
+                        iconClass = "text-emerald-400";
+                        iconName = "check-circle";
+                    } else if (selectedOptionIdx === idx) {
+                        borderClass = "border-rose-500 bg-rose-500/10 text-rose-300";
+                        iconClass = "text-rose-400";
+                        iconName = "x-circle";
+                    } else {
+                        borderClass = "border-slate-800 bg-slate-950/40 opacity-50";
+                    }
+                }
+
+                const action = isAnswerSubmitted ? "" : `onclick="selectQuizOption(${idx})"`;
+
+                return `
+                    <div ${action} class="p-3.5 rounded-xl border ${borderClass} text-xs font-medium cursor-pointer transition flex items-center justify-between gap-3">
+                        <span>${opt}</span>
+                        <i data-lucide="${iconName}" class="w-4 h-4 ${iconClass} shrink-0"></i>
+                    </div>
+                `;
+            }).join('');
+
+            const isAIGenerated = (typeof currentQ.id === 'string' && currentQ.id.startsWith("ai-"));
+
+            container.innerHTML = `
+                <!-- Question Top Header -->
+                <div class="p-5 border-b border-slate-800/80 bg-slate-900/50 flex justify-between items-center">
+                    <span class="text-xs text-brand-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        ${isAIGenerated ? '<i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i> AI Generated' : 'Mẫu Đề Khảo Sát'} 
+                        ${currentQuestionIdx + 1} / ${activeQuizQuestions.length}
+                    </span>
+                    <span class="text-[10px] bg-slate-950 border border-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono uppercase">${currentQ.topic}</span>
+                </div>
+
+                <!-- Question Main body -->
+                <div class="p-6 flex-grow space-y-4">
+                    <p class="text-sm font-semibold text-white leading-relaxed">${currentQ.question}</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        ${optionsHtml}
+                    </div>
+
+                    <!-- Explanations Box -->
+                    ${isAnswerSubmitted ? `
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-1 animate-fadeIn">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Giải thích lý thuyết:</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">${currentQ.explain}</p>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Question Footer Actions -->
+                <div class="p-5 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
+                    <div></div>
+                    <div class="flex items-center gap-2">
+                        ${!isAnswerSubmitted ? `
+                            <button onclick="submitQuizAnswer()" ${selectedOptionIdx === null ? "disabled" : ""} class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 disabled:opacity-50 disabled:hover:bg-brand-600 text-white rounded-xl text-xs font-semibold transition">
+                                Xác nhận đáp án
+                            </button>
+                        ` : `
+                            <button onclick="nextQuizQuestion()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-750 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                                Câu tiếp theo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function selectQuizOption(idx) {
+            selectedOptionIdx = idx;
+            renderActiveQuestion();
+        }
+
+        function submitQuizAnswer() {
+            if (selectedOptionIdx === null || isAnswerSubmitted) return;
+            
+            const currentQ = activeQuizQuestions[currentQuestionIdx];
+            isAnswerSubmitted = true;
+            attemptedCount++;
+
+            if (selectedOptionIdx === currentQ.answer) {
+                correctCount++;
+            }
+
+            updateQuizStats();
+            renderActiveQuestion();
+        }
+
+        function nextQuizQuestion() {
+            currentQuestionIdx++;
+            selectedOptionIdx = null;
+            isAnswerSubmitted = false;
+            renderActiveQuestion();
+        }
+
+
+        // ==================== TAB 4: AI GRAMMAR CO-PILOT ====================
+        function injectPrompt(text) {
+            const inputEl = document.getElementById('ai-chat-input');
+            inputEl.value = text;
+            inputEl.focus();
+        }
+
+        async function sendAIChatMessage() {
+            const inputEl = document.getElementById('ai-chat-input');
+            const messageText = inputEl.value.trim();
+            if (!messageText) return;
+
+            // Clear input immediately
+            inputEl.value = '';
+
+            const chatMessagesContainer = document.getElementById('ai-chat-messages');
+
+            // Render User Message
+            const userMsgHtml = `
+                <div class="flex gap-3 justify-end">
+                    <div class="p-3.5 bg-brand-600 rounded-2xl rounded-tr-none border border-brand-500/20 text-xs text-white max-w-[85%] leading-relaxed">
+                        ${escapeHTML(messageText)}
+                    </div>
+                </div>
+            `;
+            chatMessagesContainer.insertAdjacentHTML('beforeend', userMsgHtml);
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+            // Render loading indicator
+            const loadingId = 'loading-' + Date.now();
+            const loadingMsgHtml = `
+                <div class="flex gap-3" id="${loadingId}">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                        <i data-lucide="bot" class="w-4 h-4 animate-spin"></i>
+                    </div>
+                    <div class="p-3.5 bg-slate-950 rounded-2xl rounded-tl-none border border-slate-800 text-xs text-slate-400 max-w-[85%] leading-relaxed flex items-center gap-2">
+                        <span>Đang phân tích và truy hồi ngữ pháp...</span>
+                    </div>
+                </div>
+            `;
+            chatMessagesContainer.insertAdjacentHTML('beforeend', loadingMsgHtml);
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            lucide.createIcons();
+
+            // AI Prompts and Execution Configuration
+            const systemPrompt = `You are a strict, expert English Grammar Tutor for Vietnamese learners. 
+Your target is to teach, correct and analyze grammar based on 6 core areas:
+1. Wh- questions (including special abbreviations stand for/mean, "how often/long/fast/far")
+2. Tenses (Present Simple, Continuous, Perfect, Past Simple, Future Simple, Near Future)
+3. Comparatives & Superlatives (especially double comparatives: The clearer, the faster)
+4. Conditional sentences (Types 0 to 4 + mixed, and inversions, alternatives to 'if' like Unless/Without)
+5. Modal Verbs (must/mustn't, have to/don't have to, can, should)
+6. Other communications (Have got, there is/are, quantifiers, linking words, prepositions).
+
+Analyze user inputs in a high signal-density layout using bold bullet points, clear explanation, and tables when necessary. Always write explanations in Vietnamese but preserve English examples correctly.`;
+
+            // Dynamic API execution with robust Exponential Backoff
+            let responseText = "";
+            try {
+                const response = await callGeminiAPI(messageText, systemPrompt);
+                responseText = response.candidates?.[0]?.content?.parts?.[0]?.text || "Gặp lỗi phản hồi từ hệ thống AI.";
+            } catch (error) {
+                responseText = "Không thể kết nối đến Trợ lý AI Ngữ Pháp lúc này do sự cố kết nối. Hãy kiểm tra lại mạng Internet hoặc API Key.";
+            }
+
+            // Remove loading indicator
+            document.getElementById(loadingId).remove();
+
+            // Render AI response with formatted markdown to HTML transitions
+            const aiFormattedText = formatMarkdown(responseText);
+            const aiMsgHtml = `
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="p-3.5 bg-slate-950 rounded-2xl rounded-tl-none border border-slate-800 text-xs text-slate-300 max-w-[85%] leading-relaxed space-y-2">
+                        ${aiFormattedText}
+                    </div>
+                </div>
+            `;
+            chatMessagesContainer.insertAdjacentHTML('beforeend', aiMsgHtml);
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        // Mini utilities
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        // Custom high-speed markdown formatter for simple bullet points, tables, code blocks and bold formatting
+        function formatMarkdown(text) {
+            let html = escapeHTML(text);
+
+            // Code blocks
+            html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-slate-900 border border-slate-800 p-2.5 rounded-lg text-slate-300 font-mono text-[10px] my-2 overflow-x-auto">$1</pre>');
+            
+            // Inline code
+            html = html.replace(/`([^`\n]+)`/g, '<code class="bg-slate-900 border border-slate-800 px-1 py-0.5 rounded text-brand-400 font-mono text-[11px]">$1</code>');
+            
+            // Bold
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+            
+            // Bullet points
+            html = html.replace(/^\s*[-*]\s+(.*)$/gm, '<li class="ml-4 list-disc text-slate-300">$1</li>');
+            
+            // New lines to break tags
+            html = html.replace(/\n/g, '<br>');
+
+            return html;
+        }
+    </script>
+</body>
+</html>
