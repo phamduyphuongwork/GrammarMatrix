@@ -1,0 +1,194 @@
+/* CUSTOM STYLES & ANIMATIONS */
+body {
+    font-family: 'Inter', sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+/* Custom scrollbar style */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.5);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES
+   When <html> does NOT have the '.dark' class (Light theme active)
+   ========================================================================== */
+
+html:not(.dark) body {
+    background-color: #f8fafc !important;
+    color: #1e293b !important;
+}
+
+html:not(.dark) .bg-slate-950 {
+    background-color: #f1f5f9 !important;
+}
+
+html:not(.dark) .bg-slate-900 {
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025);
+}
+
+html:not(.dark) .bg-slate-900\/80 {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+html:not(.dark) .bg-slate-900\/50 {
+    background-color: rgba(248, 250, 252, 0.8) !important;
+}
+
+html:not(.dark) .bg-slate-950\/60 {
+    background-color: rgba(248, 250, 252, 0.9) !important;
+}
+
+html:not(.dark) .bg-slate-950\/40 {
+    background-color: rgba(241, 245, 249, 0.5) !important;
+}
+
+html:not(.dark) .border-slate-800 {
+    border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .border-slate-800\/80 {
+    border-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+html:not(.dark) .border-slate-800\/50 {
+    border-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+html:not(.dark) .border-slate-900 {
+    border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) .text-slate-100,
+html:not(.dark) .text-white {
+    color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-300 {
+    color: #334155 !important;
+}
+
+html:not(.dark) .text-slate-400 {
+    color: #64748b !important;
+}
+
+html:not(.dark) .text-slate-500 {
+    color: #94a3b8 !important;
+}
+
+html:not(.dark) .text-slate-600 {
+    color: #94a3b8 !important;
+}
+
+html:not(.dark) .text-brand-300 {
+    color: #1d4ed8 !important;
+}
+
+html:not(.dark) .text-brand-400 {
+    color: #2563eb !important;
+}
+
+html:not(.dark) .hover\:text-slate-200:hover {
+    color: #0f172a !important;
+}
+
+html:not(.dark) .hover\:border-slate-700:hover {
+    border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) .hover\:bg-slate-850:hover {
+    background-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .bg-slate-850 {
+    background-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .from-brand-900\/30 {
+    --tw-gradient-from: rgba(219, 234, 254, 0.6) !important;
+}
+
+html:not(.dark) .from-violet-900\/30 {
+    --tw-gradient-from: rgba(243, 232, 255, 0.6) !important;
+}
+
+html:not(.dark) .from-emerald-900\/30 {
+    --tw-gradient-from: rgba(209, 250, 229, 0.6) !important;
+}
+
+html:not(.dark) .to-slate-900 {
+    --tw-gradient-to: #ffffff !important;
+}
+
+html:not(.dark) input,
+html:not(.dark) textarea,
+html:not(.dark) select {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+html:not(.dark) .bg-brand-600,
+html:not(.dark) .bg-brand-600 *,
+html:not(.dark) .bg-emerald-600,
+html:not(.dark) .bg-emerald-600 *,
+html:not(.dark) .bg-gradient-to-r,
+html:not(.dark) .bg-gradient-to-r * {
+    color: #ffffff !important;
+}
+
+html:not(.dark) .text-emerald-300 {
+    color: #047857 !important;
+}
+
+html:not(.dark) .bg-emerald-500\/10 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+html:not(.dark) .text-rose-300 {
+    color: #b91c1c !important;
+}
+
+html:not(.dark) .bg-rose-500\/10 {
+    background-color: rgba(244, 63, 94, 0.15) !important;
+}
+
+html:not(.dark) .bg-brand-500\/10 {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+}
